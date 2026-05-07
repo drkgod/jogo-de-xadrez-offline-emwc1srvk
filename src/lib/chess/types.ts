@@ -1,0 +1,44 @@
+export type Color = 'w' | 'b'
+export type PieceType = 'p' | 'n' | 'b' | 'r' | 'q' | 'k'
+
+export interface Piece {
+  type: PieceType
+  color: Color
+}
+
+export type Board = (Piece | null)[]
+
+export interface CastlingRights {
+  wK: boolean
+  wQ: boolean
+  bK: boolean
+  bQ: boolean
+}
+
+export interface Move {
+  from: number
+  to: number
+  promotion?: PieceType
+  captured?: Piece
+  ep?: boolean
+  castling?: 'k' | 'q'
+}
+
+export interface MoveRecord {
+  move: Move
+  piece: Piece
+  san: string
+  stateBefore: GameState
+}
+
+export interface GameState {
+  board: Board
+  turn: Color
+  castling: CastlingRights
+  epSquare: number | null
+  halfMoves: number
+  fullMoves: number
+  history: MoveRecord[]
+  capturedWhite: PieceType[]
+  capturedBlack: PieceType[]
+}
