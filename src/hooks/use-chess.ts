@@ -6,7 +6,7 @@ import { applyMove } from '@/lib/chess/engine'
 import { isAttacked } from '@/lib/chess/attacks'
 import { useToast } from '@/hooks/use-toast'
 
-export function useChess(timeControl: string) {
+export function useChess(timeControl: string, isPlaying: boolean = false) {
   const [state, setState] = useState<GameState>(() => parseFen(INITIAL_FEN))
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const [promotionMove, setPromotionMove] = useState<Move | null>(null)
@@ -104,9 +104,11 @@ export function useChess(timeControl: string) {
         duration: 3000,
       })
     }
-  }, [gameStatus, state.turn, toast])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameStatus, state.turn])
 
   useEffect(() => {
+    if (!isPlaying) return
     if (gameStatus !== 'playing' && gameStatus !== 'check') return
     if (timeControl === 'unlimited') return
 
@@ -116,7 +118,7 @@ export function useChess(timeControl: string) {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [gameStatus, state.turn, timeControl])
+  }, [gameStatus, state.turn, timeControl, isPlaying])
 
   const scoreDiff = useMemo(() => getBoardMaterialDiff(state.board), [state.board])
   const val = { q: 9, r: 5, b: 3, n: 3, p: 1, k: 0 }

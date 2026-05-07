@@ -47,7 +47,7 @@ export default function Index() {
     executeMove,
     reset,
     undo,
-  } = useChess(timeControl)
+  } = useChess(timeControl, isPlaying)
 
   const isCheck = gameStatus === 'check' || gameStatus === 'checkmate'
 
